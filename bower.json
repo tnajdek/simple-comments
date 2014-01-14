@@ -1,0 +1,13 @@
+{
+  "name": "simple-comments",
+  "version": "0.0.1",
+  "devDependencies": {
+    "mustache": "~0.8.1",
+    "parse-js-sdk": "~1.2.16",
+    "requirejs": "~2.1.10",
+    "requirejs-text": "~2.0.10",
+    "almond": "~0.2.9",
+    "mocha": "~1.17.0",
+    "chai": "~1.8.1"
+  }
+}
