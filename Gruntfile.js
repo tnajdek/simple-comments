@@ -121,7 +121,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', [
 		'develop',
 		'connect',
-		// 'mocha',
 		'watch'
 	]);
 

@@ -11,10 +11,17 @@ describe('SimpleComments', function() {
 		console.log('before every test', sp);
 	});
 
-	it('should obtain approved comments collection', function(done){
+	it('should obtain approved comments collection', function(done) {
 		comments = sp.getCommentsCollection('test1');
 		comments.fetch().then(function(items) {
 			assert.lengthOf(items, 1, "Should fetch one approved comment");
+			done();
+		});
+	});
+
+	it('should populate #comments section with comments', function(done) {
+		sp.comments('#comments', 'test1', false).then(function() {
+			assert.lengthOf(document.querySelectorAll('#comments .comment'), 1, 'Should render approved comments');
 			done();
 		});
 	});
