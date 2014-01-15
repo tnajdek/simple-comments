@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+	var parseConfig = grunt.file.readJSON('./parse-config.json');
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		symlink: {
@@ -7,7 +8,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'test',
-						src: ['*.html', 'tests.js'],
+						src: ['tests.js'],
 						dest: 'local'
 					},
 					{
@@ -63,14 +64,44 @@ module.exports = function(grunt) {
 				options: {
 					spawn: false
 				}
+			},
+			test: {
+				files: ['src/*.js', 'test/*'],
+				tasks: ['mocha'],
+				options: {
+					spawn: false
+				}
 			}
 		},
 		mocha: {
 			test: {
 				options: {
-					urls: [ 'http://localhost:8080/index.html' ],
-				},
-			},
+					urls: [ 'http://127.0.0.1:8080/index.html' ],
+					run: true
+				}
+			}
+		},
+		replace: {
+			parse: {
+				files: [{
+					src: 'test/index.html',
+					dest: 'local/index.html'
+				}],
+				options: {
+					patterns: [
+						{
+							match: 'appid',
+							replacement: parseConfig.appid,
+							expression: false
+						},
+						{
+							match: 'appkey',
+							replacement: parseConfig.appkey,
+							expression: false	
+						}
+					]
+				}
+			}
 		}
 	});
 
@@ -79,15 +110,18 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-mocha');
+	grunt.loadNpmTasks('grunt-replace');
 
 	grunt.registerTask('develop', [
 		'requirejs',
-		'symlink'
+		'symlink',
+		'replace'
 	]);
 
 	grunt.registerTask('default', [
 		'develop',
 		'connect',
+		// 'mocha',
 		'watch'
 	]);
 

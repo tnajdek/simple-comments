@@ -10,7 +10,17 @@
 		<div id="mocha"></div>
 		<script src="simple-comments.js"></script>
 		<script src="/mocha/mocha.js"></script>
+		<script>
+			mocha.setup('bdd');
+			var PARSE_APP_ID = '@@appid',
+				PARSE_APP_KEY = '@@appkey';
+		</script>
 		<script src="/mocha/chai.js"></script>
 		<script src="/tests.js"></script>
+		<script>
+			if (navigator.userAgent.indexOf('PhantomJS') < 0) {
+				mocha.run();
+			}
+		</script>
 	</body>
 </html>
