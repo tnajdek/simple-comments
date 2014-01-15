@@ -22,6 +22,15 @@ describe('SimpleComments', function() {
 	it('should populate #comments section with comments', function(done) {
 		sp.comments('#comments', 'test1', false).then(function() {
 			assert.lengthOf(document.querySelectorAll('#comments .comment'), 1, 'Should render approved comments');
+			assert.lengthOf(document.querySelectorAll('#comments .comment-editor'), 0, 'Should not render a comment editor');
+			done();
+		});
+	});
+
+	it('should populate #comments section with comments and an editor', function(done) {
+		sp.comments('#comments', 'test1', true).then(function() {
+			assert.lengthOf(document.querySelectorAll('#comments .comment'), 1, 'Should render approved comments');
+			assert.lengthOf(document.querySelectorAll('#comments .comment-editor'), 1, 'Should also render comment editor');
 			done();
 		});
 	});

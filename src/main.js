@@ -1,5 +1,5 @@
-define(['parse', 'mustache', 'text!tpl/comment.mustache'],
-	function (Parse, Mustache, commentTemplate) {
+define(['parse', 'mustache', 'text!tpl/comment.mustache', 'text!tpl/comment-editor.mustache'],
+	function (Parse, Mustache, commentTpl, commentEditorTpl) {
 	var SimpleComments = function(options) {
 		var ApprovedComment = Parse.Object.extend("comments_approved"),
 			QueuedComment = Parse.Object.extend("comments_queue");
@@ -30,7 +30,7 @@ define(['parse', 'mustache', 'text!tpl/comment.mustache'],
 				var comments = '';
 
 				items.each(function(item) {
-					var comment = Mustache.render(commentTemplate, {
+					var comment = Mustache.render(commentTpl, {
 						name: item.get('name'),
 						text: item.get('comment'),
 						date: item.get('createdAt'),
@@ -40,6 +40,11 @@ define(['parse', 'mustache', 'text!tpl/comment.mustache'],
 						comments += comment;
 					}
 				});
+
+				if(allowPosting) {
+					comments += Mustache.render(commentEditorTpl, {});
+				}
+
 				container.innerHTML = comments;
 				promise.resolve();
 			});

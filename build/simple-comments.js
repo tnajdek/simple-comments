@@ -9909,8 +9909,10 @@ define("parse", (function (global) {
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
 define('text!tpl/comment.mustache',[],function () { return '<div class="comment">\n\t<div class="author">\n\t\t<img src="http://gravatar.com/avatar/{{ hash }}?s=32&d=identicon" alt="" class="avatar">\n\t\t<span class="name">{{ name }}</span>\n\t</div>\n\t<div class="date">\n\t\t{{ date }}\n\t</div>\n\t<div class="text">\n\t\t{{ text }}\n\t</div>\n</div>';});
 
-define('main',['parse', 'mustache', 'text!tpl/comment.mustache'],
-	function (Parse, Mustache, commentTemplate) {
+define('text!tpl/comment-editor.mustache',[],function () { return '<div class="comment-editor">\n\t<form>\n\t\t<p>\n\t\t\t<label for="author">\n\t\t\t\tName\n\t\t\t</label>\n\t\t\t<input type="text" id="author">\n\t\t</p>\n\t\t<p>\n\t\t\t<label for="email">\n\t\t\t\tEmail\n\t\t\t</label>\n\t\t\t<input type="text" id="email">\n\t\t</p>\n\t\t<p>\n\t\t\t<label for="website">\n\t\t\t\tWebsite\t\n\t\t\t</label>\n\t\t\t<input type="text" id="website">\n\t\t</p>\n\t\t<p>\n\t\t\t<label for="comment-text">\n\t\t\t\tComment\n\t\t\t</label>\n\t\t\t<textarea id="comment-text" cols="30" rows="10"></textarea>\n\t\t</p>\n\t</form>\n</div>';});
+
+define('main',['parse', 'mustache', 'text!tpl/comment.mustache', 'text!tpl/comment-editor.mustache'],
+	function (Parse, Mustache, commentTpl, commentEditorTpl) {
 	var SimpleComments = function(options) {
 		var ApprovedComment = Parse.Object.extend("comments_approved"),
 			QueuedComment = Parse.Object.extend("comments_queue");
@@ -9941,7 +9943,7 @@ define('main',['parse', 'mustache', 'text!tpl/comment.mustache'],
 				var comments = '';
 
 				items.each(function(item) {
-					var comment = Mustache.render(commentTemplate, {
+					var comment = Mustache.render(commentTpl, {
 						name: item.get('name'),
 						text: item.get('comment'),
 						date: item.get('createdAt'),
@@ -9951,6 +9953,11 @@ define('main',['parse', 'mustache', 'text!tpl/comment.mustache'],
 						comments += comment;
 					}
 				});
+
+				if(allowPosting) {
+					comments += Mustache.render(commentEditorTpl, {});
+				}
+
 				container.innerHTML = comments;
 				promise.resolve();
 			});
