@@ -34,4 +34,10 @@ describe('SimpleComments', function() {
 			done();
 		});
 	});
+
+	it('should post a new comment to the queue', function(done) {
+		sp.comments("#comments", 'test1', true).then(function() {
+			//impement me
+		});
+	});
 });
